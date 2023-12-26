@@ -19,8 +19,10 @@ class Notification:
         tytle = Label(text=self.tytle)
         text = Label(text=self.text)
         date = Label(text=self.date)
+        close = Button(text='close')
         #тип как то будет влиять на внешку
         lay.add_widget(tytle)
         lay.add_widget(text)
+        lay.add_widget(close)
         return lay
 
