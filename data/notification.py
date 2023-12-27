@@ -13,16 +13,19 @@ class Notification:
         self.tytle = tytle
         self.text = text
         self.date = date
-
-    def show(self):
-        lay = AnchorLayout()
+        self.lay = AnchorLayout()
         tytle = Label(text=self.tytle)
         text = Label(text=self.text)
         date = Label(text=self.date)
         close = Button(text='close')
         #тип как то будет влиять на внешку
-        lay.add_widget(tytle)
-        lay.add_widget(text)
-        lay.add_widget(close)
-        return lay
+        self.lay.add_widget(tytle)
+        self.lay.add_widget(text)
+        self.lay.add_widget(close)
 
+    def show(self):
+        return self.lay
+
+    def close(self, l: Screen):
+        l.remove_widget(self.lay)
+        return 0
