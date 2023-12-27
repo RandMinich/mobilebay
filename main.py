@@ -1,14 +1,12 @@
 from kivy.app import App
-from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.label import Label
-from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
-from kivy.core.window import Window
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.label import Label
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.textinput import TextInput
+from functools import partial
 from data import notification
-
 
 sm = ScreenManager()
 
@@ -41,7 +39,6 @@ class MainScreen(Screen):
         super().__init__()
         self.name = "MainScreen"
 
-
         main_screen = FloatLayout()
         self.add_widget(main_screen)
 
@@ -67,15 +64,16 @@ class MainScreen(Screen):
         main_screen.add_widget(main_screen.profile)
 
 
-
-class Notification(Screen):
+class Notifications(Screen):
     def __init__(self, **kwargs):
         super().__init__()
-        notification_screen=BoxLayout(orientation='vertical')
+        notification_screen = BoxLayout(orientation='vertical')
         self.add_widget(notification_screen)
-        self.notifications = [notification.Notification(tytle="Fuck").show(), notification.Notification(tytle="You").show()]
+        self.notifications = [notification.Notification(tytle="Fuck").show(),
+                              notification.Notification(tytle="You").show()]
         for i in self.notifications:
             notification_screen.add_widget(i)
+
 
 class Documents(Screen):
     def __init__(self, **kwargs):
@@ -85,19 +83,22 @@ class Documents(Screen):
         for i in self.documents:
             documents_screen.add_widget(i)
 
+
 class Services(Screen):
 
     def __init__(self, **kwargs):
         super().__init__()
+
+
 #          Хз как представить список услуг, думаю на каждую услугу свое окно а тут типо списка
 
 
 class MyApp(App):
 
     def build(self):
-        #sm.add_widget(LoginScreen())
-        #sm.add_widget(MainScreen())
-        sm.add_widget(Notification())
+        # sm.add_widget(LoginScreen())
+        # sm.add_widget(MainScreen())
+        sm.add_widget(Notifications())
         return sm
 
 
