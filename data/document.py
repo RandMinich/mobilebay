@@ -21,6 +21,7 @@ class Documents(Based_Widget):
         text = Label(text=self.text)
         image = Image(image=self.image)
         close = Button(text='close', on_press=self.close)
+        show_image = Button(text='show_original', on_press=self.close)
         self.lay.add_widget(tytle)
         self.lay.add_widget(text)
         self.lay.add_widget(image)
