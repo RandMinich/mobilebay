@@ -30,7 +30,9 @@ class Making_requests(Based_Widget):
         p.show()
         if self.type == 1:
             try:
-                x = requests.get('')
+                answer = requests.get('')
+                p = Popup(title='Good', content=Label(text='Nice answer'))
+                p.open()
             except Exception as e:
                 p = Popup(title='', content=Label(text=str(e)))
                 p.open()

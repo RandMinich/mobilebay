@@ -5,7 +5,10 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.textinput import TextInput
-from functools import partial
+
+from data import document
+from data import  basic_widget
+from data import making_request
 from data import notification
 
 sm = ScreenManager()
