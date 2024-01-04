@@ -12,10 +12,21 @@ from kivy.uix.popup import Popup
 from data.basic_widget import Based_Widget
 
 class Category(Based_Widget):
-    def __init__(self):
+    def __init__(self, title, icon):
         super().__init__()
-        open_list = Button(text='', on_press=self.opening_of_list)
+        title = Label(text=title)
+        icon=Image(image=icon)
+        open_list = Button(text='', on_press=self.switch_turn)
+        self.switch = False
         self.everyone=[]
+
+    def switch_turn(self):
+        if self.switch:
+            self.switch=False
+            self.opening_of_list()
+        else:
+            self.switch=True
+            self.close_list
 
     def opening_of_list(self):
         #тут должна быть раскладка элементов
@@ -23,3 +34,8 @@ class Category(Based_Widget):
 
     def add_element(self, obj):
         self.everyone.append(obj)
+
+    def close_lict(self):
+        pass
+
+

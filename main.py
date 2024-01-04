@@ -1,14 +1,13 @@
+import requests
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
+from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.textinput import TextInput
 
-from data import document
-from data import  basic_widget
-from data import making_request
 from data import notification
 
 sm = ScreenManager()
@@ -29,8 +28,23 @@ class LoginScreen(Screen):
         login_screen.password = TextInput(password=True, multiline=False)
         login_screen.add_widget(login_screen.password)
         login_screen.enter = Button(text="Enter")
-        login_screen.enter.bind(on_press=self.to_main)
+        login_screen.enter.bind(on_press=self.send_check)
         login_screen.add_widget(login_screen.enter)
+
+    def send_check(self):
+        try:
+            answer = requests.get('')
+        except Exception as e:
+            e = str(e)
+            p = Popup()
+            p.title = 'Answer'
+            c = Label(text=f'Процесс захода не произведен')
+            p.add_widget(c)
+            p.show()
+            with open('logs.txt') as f:
+                f.write(f'\nError: {e}')
+            return 0
+        self.manager.current = 'LoadingScreen'
 
     def to_main(self, *args):
         self.manager.current = 'MainScreen'
@@ -86,6 +100,11 @@ class Documents(Screen):
         for i in self.documents:
             documents_screen.add_widget(i)
 
+class LoadingScreen(Screen):
+    def __init__(self, **kwargs):
+        super().__init__()
+        self.name = 'LoadingScreen'
+        # запрос документов тут и тп
 
 class Services(Screen):
 
