@@ -80,14 +80,15 @@ class MainScreen(Screen):
         main_screen.add_widget(main_screen.bell)
         main_screen.add_widget(main_screen.profile)
 
-
+notification_list = [('fuck'),('you')]
 class Notifications(Screen):
     def __init__(self, **kwargs):
         super().__init__()
+        self.notifications = []
         notification_screen = BoxLayout(orientation='vertical')
         self.add_widget(notification_screen)
-        self.notifications = [notification.Notification(tytle="Fuck").show(),
-                              notification.Notification(tytle="You").show()]
+        for i in notification_list:
+            self.notifications.append(notification.Notification(tytle=i[0]).show())
         for i in self.notifications:
             notification_screen.add_widget(i)
 
@@ -100,11 +101,14 @@ class Documents(Screen):
         for i in self.documents:
             documents_screen.add_widget(i)
 
+
 class LoadingScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__()
         self.name = 'LoadingScreen'
+        requests.get('запрос к серверу на получение уведомлений')
         # запрос документов тут и тп
+
 
 class Services(Screen):
 
@@ -113,7 +117,6 @@ class Services(Screen):
 
 
 #          Хз как представить список услуг, думаю на каждую услугу свое окно а тут типо списка
-
 
 class MyApp(App):
 

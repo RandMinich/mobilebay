@@ -1,4 +1,5 @@
 from flask import Flask, render_template, redirect, request, abort
+import json
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret_key'
@@ -7,11 +8,18 @@ app.config['SECRET_KEY'] = 'secret_key'
 def check():
     name = request.args.get('name')
     password = request.args.get('password')
+    return True
 
 @app.route('/docs', methods=['POST'])
 def documents():
-    json_file = None
-    return json_file
+    json_file = {}
+    return json.dumps(json_file)
+
+
+@app.route('/notif', methods=['POST', 'GET'])
+def notifications():
+    name = request.args.get('name')
+    password = request.args.get('password')
 
 def main():
     app.run()

@@ -19,7 +19,7 @@ class Notification(Based_Widget):
         self.date = date
         tytle = Label(text=self.tytle)
         text = Label(text=self.text)
-        date = Label(text=self.date)
+        date = Label(text=str(self.date))
         close = Button(text='close', on_press=self.close)
         #тип как то будет влиять на внешку
         self.lay.add_widget(tytle)
