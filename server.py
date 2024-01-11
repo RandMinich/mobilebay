@@ -34,6 +34,12 @@ def give_coords():
     session.add(cor)
     session.add(ev)
 
+@app.route('/get_geo', methods=['POST', 'GET'])
+def get_coords():
+    ev = list(Events.query.all())
+    return ev
+
+
 
 def main():
     app.run()

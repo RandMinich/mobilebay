@@ -1,3 +1,4 @@
+import plyer
 import requests
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
@@ -7,7 +8,8 @@ from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.textinput import TextInput
-
+import kivy_garden.mapview as mapview
+from plyer import gps
 from data import notification
 
 sm = ScreenManager()
@@ -117,6 +119,22 @@ class Services(Screen):
 
 
 #          Хз как представить список услуг, думаю на каждую услугу свое окно а тут типо списка
+
+class MapScreen(Screen):
+    def __init__(self, **kwargs):
+        super().__init__()
+        self.name = 'MapsScreen'
+        gps.configure(on_location=self.check)
+        gps.start()
+        self.map = mapview.MapView(lat=42.4381206, lon=19.2562048)
+
+    def check(self, **kwargs):
+        c = requests.get('/get_coords').json()
+        for i in c:
+            if i.lan == kwargs['lat'] and i.lon == kwargs['lon']:
+                plyer.notification.notify(title='Warning', message="Уебывай оттуда")
+
+
 
 class MyApp(App):
 
