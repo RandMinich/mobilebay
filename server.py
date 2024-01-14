@@ -24,15 +24,26 @@ def notifications():
     name = request.args.get('name')
     password = request.args.get('password')
 
-@app.route('/geo', methods=['POST', 'GET'])
+@app.route('/geo', methods=['POST'])
 def give_coords():
-    coords = request.args.get('coords')
-    text = request.args.get('text')
-    author = request.args.get('author')
-    cor = Coords(coord=coords)
-    ev = Events(coord=cor.id, author_id=author, description=text)
-    session.add(cor)
-    session.add(ev)
+    request_data = request.get_json()
+
+    coords = None
+    author = None
+    text = None
+    if request_data:
+        if 'coords' in request_data:
+            coords = request_data['coords']
+        if 'author' in request_data:
+            author = request_data['author']
+        if 'text' in request_data:
+            text = request_data['text']
+        cor = Coords(coord=coords)
+        ev = Events(coord=cor.id, author_id=author, description=text)
+        session.add(cor)
+        session.add(ev)
+    return 'good'
+
 
 @app.route('/get_geo', methods=['POST', 'GET'])
 def get_coords():

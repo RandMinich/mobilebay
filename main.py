@@ -1,5 +1,9 @@
+import math
+
+import kivy_garden.mapview as mapview
 import plyer
 import requests
+import schedule
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
@@ -8,8 +12,8 @@ from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.textinput import TextInput
-import kivy_garden.mapview as mapview
 from plyer import gps
+
 from data import notification
 
 sm = ScreenManager()
@@ -82,7 +86,10 @@ class MainScreen(Screen):
         main_screen.add_widget(main_screen.bell)
         main_screen.add_widget(main_screen.profile)
 
-notification_list = [('fuck'),('you')]
+
+notification_list = [('fuck'), ('you')]
+
+
 class Notifications(Screen):
     def __init__(self, **kwargs):
         super().__init__()
@@ -127,13 +134,25 @@ class MapScreen(Screen):
         gps.configure(on_location=self.check)
         gps.start()
         self.map = mapview.MapView(lat=42.4381206, lon=19.2562048)
+        self.adding = Button(text='Add', on_press=self.add_thing)
 
     def check(self, **kwargs):
         c = requests.get('/get_coords').json()
+        lat = kwargs['lat']
+        lon = kwargs['lon']
         for i in c:
-            if i.lan == kwargs['lat'] and i.lon == kwargs['lon']:
+            if i.lan > lat - 0.0001 and i.lan < lat + 0.0001 and i.lon > lon - (
+                    (111111 * math.cos(math.radians(lon)) * 0.0001) / 111111) \
+                    and i.lon < lon + (
+                    (111111 * math.cos(math.radians(lon)) * 0.0001) / 111111):
+                notification_list.append(notification.Notification().show())
                 plyer.notification.notify(title='Warning', message="Уебывай оттуда")
 
+    def add_thing(self):
+        p = Popup(title='', content=Label(text='Короче, подумайте как добавлять'))
+        p.open()
+        data = {}
+        requests.post('/geo', data)
 
 
 class MyApp(App):
@@ -142,6 +161,7 @@ class MyApp(App):
         # sm.add_widget(LoginScreen())
         # sm.add_widget(MainScreen())
         sm.add_widget(Notifications())
+        schedule.every(1).minute.run(MapScreen().check())
         return sm
 
 
