@@ -135,6 +135,7 @@ class MapScreen(Screen):
         gps.start()
         self.map = mapview.MapView(lat=42.4381206, lon=19.2562048)
         self.adding = Button(text='Add', on_press=self.add_thing)
+        self.add_widget(self.adding)
 
     def check(self, **kwargs):
         c = requests.get('/get_coords').json()
