@@ -13,6 +13,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.textinput import TextInput
 from plyer import gps
+from kivy.graphics import Color, Rectangle
 
 from data import notification
 
@@ -27,19 +28,23 @@ class LoginScreen(Screen):
         login_screen = FloatLayout()
         self.add_widget(login_screen)
 
-        login_screen.add_widget(Label(text='User Name'))
+        login_screen.add_widget(Label(text='User Name', size_hint=(None, None), size=(10, 10), pos_hint={'x': 0.3, 'y': 0.5}))
         login_screen.username = TextInput(multiline=False)
         login_screen.add_widget(login_screen.username)
         login_screen.add_widget(Label(text='password'))
         login_screen.password = TextInput(password=True, multiline=False)
         login_screen.add_widget(login_screen.password)
         login_screen.enter = Button(text="Enter")
-        login_screen.enter.bind(on_press=self.send_check)
+        # login_screen.enter.bind(on_press=self.send_check)
         login_screen.add_widget(login_screen.enter)
+
+        with login_screen.enter.canvas.before:
+            Color(0.2, 0.7, 0.3, 1)  # RGBA values (red, green, blue, alpha)
+            self.rect = Rectangle(pos=login_screen.enter.pos, size=login_screen.enter.size)
 
     def send_check(self):
         try:
-            answer = requests.get('')
+             answer = requests.get('')
         except Exception as e:
             e = str(e)
             p = Popup()
@@ -115,7 +120,7 @@ class LoadingScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__()
         self.name = 'LoadingScreen'
-        requests.get('запрос к серверу на получение уведомлений')
+        # requests.get('запрос к серверу на получение уведомлений')
         # запрос документов тут и тп
 
 
@@ -131,15 +136,17 @@ class MapScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__()
         self.name = 'MapsScreen'
-        gps.configure(on_location=self.check)
-        gps.start()
+        # gps.configure(on_location=self.check)
+        # gps.start()
         self.map = mapview.MapView(lat=42.4381206, lon=19.2562048)
         self.adding = Button(text='Add', on_press=self.add_thing)
         self.add_widget(self.adding)
         self.add_widget(self.map)
 
+    '''
+    
     def check(self, **kwargs):
-        c = requests.get('/get_coords').json()
+        # c = requests.get('/get_coords').json()
         lat = kwargs['lat']
         lon = kwargs['lon']
         for i in c:
@@ -149,6 +156,8 @@ class MapScreen(Screen):
                     (111111 * math.cos(math.radians(lon)) * 0.0001) / 111111):
                 notification_list.append(notification.Notification().show())
                 plyer.notification.notify(title='Warning', message="Уебывай оттуда")
+                
+                 '''
 
     def add_thing(self):
         p = Popup(title='', content=Label(text='Короче, подумайте как добавлять'))
@@ -160,12 +169,16 @@ class MapScreen(Screen):
 class MyApp(App):
 
     def build(self):
+        sm.add_widget(LoginScreen())
+        sm.add_widget(MainScreen())
+        # sm.add_widget(Notifications())
         # sm.add_widget(LoginScreen())
         # sm.add_widget(MainScreen())
         sm.add_widget(Notifications())
-        schedule.every(1).minute.run(MapScreen().check())
+        # schedule.every(1).minute.run(MapScreen().check())
         return sm
 
 
 if __name__ == '__main__':
     MyApp().run()
+
