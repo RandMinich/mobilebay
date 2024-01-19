@@ -1,19 +1,15 @@
-import math
-
 import kivy_garden.mapview as mapview
-import plyer
 import requests
-import schedule
 from kivy.app import App
+from kivy.graphics import Color, Rectangle
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.textinput import TextInput
-from plyer import gps
-from kivy.graphics import Color, Rectangle
 
 from data import notification
 
@@ -28,13 +24,14 @@ class LoginScreen(Screen):
         login_screen = FloatLayout()
         self.add_widget(login_screen)
 
-        login_screen.add_widget(Label(text='User Name', size_hint=(None, None), size=(10, 10), pos_hint={'x': 0.3, 'y': 0.5}))
+        login_screen.add_widget(
+            Label(text='User Name', size_hint=(None, None), size=(10, 10), pos_hint={'x': 0.3, 'y': 0.5}))
         login_screen.username = TextInput(multiline=False)
         login_screen.add_widget(login_screen.username)
         login_screen.add_widget(Label(text='password'))
         login_screen.password = TextInput(password=True, multiline=False)
         login_screen.add_widget(login_screen.password)
-        login_screen.enter = Button(text="Enter")
+        login_screen.enter = Button(text="Enter", color=(0.8, 0.1, 0.3, 1))
         # login_screen.enter.bind(on_press=self.send_check)
         login_screen.add_widget(login_screen.enter)
 
@@ -44,7 +41,7 @@ class LoginScreen(Screen):
 
     def send_check(self):
         try:
-             answer = requests.get('')
+            answer = requests.get('')
         except Exception as e:
             e = str(e)
             p = Popup()
@@ -160,10 +157,15 @@ class MapScreen(Screen):
                  '''
 
     def add_thing(self):
-        p = Popup(title='', content=Label(text='Короче, подумайте как добавлять'))
-        p.open()
-        data = {}
-        requests.post('/geo', data)
+        p = Image(source='marker_const.png')
+        accept_button = Button(text='acept', on_press=self.send_event)
+        self.add_widget(accept_button)
+        self.add_widget(p)
+
+
+    def send_event(self):
+        data = {'lan': self.map.lat, 'lon': self.map.lon, 'author': '', 'text': ''}
+        # requests.post('/geo', data)
 
 
 class MyApp(App):
