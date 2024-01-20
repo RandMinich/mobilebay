@@ -133,6 +133,7 @@ class MapScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__()
         self.name = 'MapsScreen'
+        self.text = TextInput(multiline=False)
         # gps.configure(on_location=self.check)
         # gps.start()
         self.map = mapview.MapView(lat=42.4381206, lon=19.2562048)
@@ -158,13 +159,18 @@ class MapScreen(Screen):
 
     def add_thing(self):
         p = Image(source='marker_const.png')
-        accept_button = Button(text='acept', on_press=self.send_event)
+        accept_button = Button(text='acept', on_press=self.text_entering)
         self.add_widget(accept_button)
         self.add_widget(p)
 
+    def text_entering(self):
+        p = Popup(title='Your description of event', content=self.text)
+        p.bind(on_dismiss=self.send_event)
+        p.open()
 
     def send_event(self):
-        data = {'lan': self.map.lat, 'lon': self.map.lon, 'author': '', 'text': ''}
+        text = self.text
+        data = {'lan': self.map.lat, 'lon': self.map.lon, 'author': '', 'text': text}
         # requests.post('/geo', data)
 
 
