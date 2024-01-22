@@ -15,6 +15,14 @@ from kivy.uix.textinput import TextInput
 from plyer import gps
 from kivy.graphics import Color, Rectangle
 
+
+
+import sys
+# from pyto import *
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+
+
 from data import notification
 
 sm = ScreenManager()
@@ -28,19 +36,23 @@ class LoginScreen(Screen):
         login_screen = FloatLayout()
         self.add_widget(login_screen)
 
-        login_screen.add_widget(Label(text='User Name', size_hint=(None, None), size=(10, 10), pos_hint={'x': 0.3, 'y': 0.5}))
-        login_screen.username = TextInput(multiline=False)
+        #background-color
+        with self.canvas.before:
+            Color(1, 1, 1, 1)  # Set the color (RGBA)
+            self.rect = Rectangle(size=(1000, 1000), pos_hint={'x': 0.5, 'y': 0.5})
+
+        #здесь должно быть лого!!!
+        login_screen.add_widget(Label(text='JMB', size_hint=(None, None), size=(100, 50), pos_hint={'x': 0.32, 'y': 0.37}, color=(0.0, 0.0, 0.0, 1)))
+        login_screen.username = TextInput(multiline=False, size_hint=(None, None), size=(300, 30), pos_hint={'x': 0.35, 'y': 0.34})
         login_screen.add_widget(login_screen.username)
-        login_screen.add_widget(Label(text='password'))
-        login_screen.password = TextInput(password=True, multiline=False)
+        login_screen.add_widget(Label(text='Password', size_hint=(None, None), size=(100, 50), pos_hint={'x': 0.34, 'y': 0.28}, color=(0.0, 0.0, 0.0, 1)))
+        login_screen.password = TextInput(password=True, multiline=False, size_hint=(None, None), size=(300, 30), pos_hint={'x': 0.35, 'y': 0.25})
         login_screen.add_widget(login_screen.password)
-        login_screen.enter = Button(text="Enter")
+        login_screen.enter = Button(text="Enter", size_hint=(None, None), size=(70, 40), pos_hint={'x': 0.45, 'y': 0.15}, background_color=(0.1, 0.1, 0.1, 0.1), color=(0.0, 0.0, 0.0, 1))
         # login_screen.enter.bind(on_press=self.send_check)
         login_screen.add_widget(login_screen.enter)
 
-        with login_screen.enter.canvas.before:
-            Color(0.2, 0.7, 0.3, 1)  # RGBA values (red, green, blue, alpha)
-            self.rect = Rectangle(pos=login_screen.enter.pos, size=login_screen.enter.size)
+
 
     def send_check(self):
         try:
@@ -70,27 +82,43 @@ class MainScreen(Screen):
         main_screen = FloatLayout()
         self.add_widget(main_screen)
 
-        main_screen.bell = Button(text="BELL")
-        main_screen.profile = Button(text="USER")
-        main_screen.docs = Button(text="docs")
-        main_screen.helthcare = Button(text="Hospital\nrequest")
-        main_screen.taxes = Button(text="taxes")
-        main_screen.more = Button(text="more")
-        main_screen.map = Button(text="map")
-        main_screen.text1 = Label(text="Text1")
-        main_screen.text2 = Label(text="Text2")
-        main_screen.help = Button(text="help")
+        #background-color
+        with self.canvas.before:
+            Color(1, 1, 1, 1)  # Set the color (RGBA)
+            self.rect = Rectangle(size=(1000, 1000), pos_hint={'x': 0.5, 'y': 0.5})
+
+        main_screen.bell = Button(text="BELL", size_hint=(None, None), size=(80, 80), pos_hint={'x': 0.0, 'y': 0.9}, color=(0.0, 0.0, 0.0, 1), background_color=(0.1,0.1,0.1,0))
+        main_screen.profile = Button(text="USER", size_hint=(None, None), size=(80, 80), pos_hint={'x': 0.92, 'y': 0.9}, color=(0.0, 0.0, 0.0, 1), background_color=(0.1,0.1,0.1,0))
+        main_screen.docs = Button(text="docs", size_hint=(None, None), size=(100, 100), pos_hint={'x': 0.2, 'y': 0.75}, color=(0.0, 0.0, 0.0, 1))
+        main_screen.helthcare = Button(text="Hospital\nrequest", size_hint=(None, None), size=(100, 100), pos_hint={'x': 0.45, 'y': 0.75}, color=(0.0, 0.0, 0.0, 1))
+        # main_screen.taxes = Button(text="taxes") Здесь я хз что делать поэтому просто закоментил и ниже тоже самое
+        main_screen.more = Button(text="more", size_hint=(None, None), size=(100, 100), pos_hint={'x': 0.7, 'y': 0.75}, color=(0.0, 0.0, 0.0, 1))
+        main_screen.map = Button(text="map", size_hint=(None, None), size=(600,300), pos_hint={'x': 0.2, 'y': 0.325}, color=(0.0, 0.0, 0.0, 1))
+        main_screen.text1 = Button(text="passport", size_hint=(None, None), size=(250, 150), pos_hint={'x': 0.2, 'y': 0.1}, color=(0.0, 0.0, 0.0, 1)) # Паспорт + права в кнопку надо сделать, я заменю, но просто чтобы ты не искал, они должны по-сути переводить на эти два раздела документов
+        main_screen.text2 = Button(text="driver licence", size_hint=(None, None), size=(250, 150), pos_hint={'x': 0.55, 'y': 0.1}, color=(0.0, 0.0, 0.0, 1))
+        main_screen.help = Button(text="help", size_hint=(None, None), size=(50, 20), pos_hint={'x': 0.48, 'y': 0.02}, color=(0.0, 0.0, 0.0, 1), background_color=(0.1,0.1,0.1,0))
         main_screen.add_widget(main_screen.help)
         main_screen.add_widget(main_screen.text1)
         main_screen.add_widget(main_screen.text2)
         main_screen.add_widget(main_screen.map)
         main_screen.add_widget(main_screen.more)
-        main_screen.add_widget(main_screen.taxes)
+        # main_screen.add_widget(main_screen.taxes)
         main_screen.add_widget(main_screen.helthcare)
         main_screen.add_widget(main_screen.docs)
         main_screen.add_widget(main_screen.bell)
         main_screen.add_widget(main_screen.profile)
 
+        #radius i ne tolko
+        '''
+        self.main_screen.docs.setStyleSheet (
+            """"
+            border-top-left-radius: {5};
+            border-bottom-left-radius: {5};
+            border-top-right-radius: {5};
+            border-bottom=right-radius: {5};
+            """
+        )
+        '''
 
 notification_list = [('fuck'), ('you')]
 
@@ -105,6 +133,13 @@ class Notifications(Screen):
             self.notifications.append(notification.Notification(tytle=i[0]).show())
         for i in self.notifications:
             notification_screen.add_widget(i)
+
+
+
+        #background-color
+        with self.canvas.before:
+            Color(1, 1, 1, 1)  # Set the color (RGBA)
+            self.rect = Rectangle(size=(1000, 1000), pos_hint={'x': 0.5, 'y': 0.5})
 
 
 class Documents(Screen):
@@ -170,16 +205,14 @@ class MyApp(App):
 
     def build(self):
         sm.add_widget(LoginScreen())
-        sm.add_widget(MainScreen())
+        # sm.add_widget(MainScreen())
         # sm.add_widget(Notifications())
         # sm.add_widget(LoginScreen())
         # sm.add_widget(MainScreen())
-        sm.add_widget(Notifications())
+        # sm.add_widget(Notifications())
         # schedule.every(1).minute.run(MapScreen().check())
         return sm
 
 
 if __name__ == '__main__':
     MyApp().run()
-
-# nehvatka 70%
