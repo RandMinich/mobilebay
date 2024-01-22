@@ -117,7 +117,7 @@ class MainScreen(Screen):
         )
         '''
 
-notification_list = [('fuck'), ('you')]
+notification_list = [('fuck', 'fsffwfwfffgsdgdgddgdgdfg'), ('you', 'fsffwfwfffgsdgdgddgdgdfg')]
 
 
 class Notifications(Screen):
@@ -213,12 +213,12 @@ class MapScreen(Screen):
 class MyApp(App):
 
     def build(self):
-        sm.add_widget(LoginScreen())
+        # sm.add_widget(LoginScreen())
         # sm.add_widget(MainScreen())
         # sm.add_widget(Notifications())
         # sm.add_widget(LoginScreen())
         # sm.add_widget(MainScreen())
-        # sm.add_widget(Notifications())
+        sm.add_widget(Notifications())
         # schedule.every(1).minute.run(MapScreen().check())
         return sm
 
