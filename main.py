@@ -1,19 +1,15 @@
-import math
-
 import kivy_garden.mapview as mapview
-import plyer
 import requests
-import schedule
 from kivy.app import App
+from kivy.graphics import Color, Rectangle
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.textinput import TextInput
-from plyer import gps
-from kivy.graphics import Color, Rectangle
 
 
 
@@ -44,11 +40,15 @@ class LoginScreen(Screen):
         #здесь должно быть лого!!!
         login_screen.add_widget(Label(text='JMB', size_hint=(None, None), size=(100, 50), pos_hint={'x': 0.32, 'y': 0.37}, color=(0.0, 0.0, 0.0, 1)))
         login_screen.username = TextInput(multiline=False, size_hint=(None, None), size=(300, 30), pos_hint={'x': 0.35, 'y': 0.34})
+        login_screen.add_widget(
+            Label(text='User Name', size_hint=(None, None), size=(10, 10), pos_hint={'x': 0.3, 'y': 0.5}))
+        login_screen.username = TextInput(multiline=False)
         login_screen.add_widget(login_screen.username)
         login_screen.add_widget(Label(text='Password', size_hint=(None, None), size=(100, 50), pos_hint={'x': 0.34, 'y': 0.28}, color=(0.0, 0.0, 0.0, 1)))
         login_screen.password = TextInput(password=True, multiline=False, size_hint=(None, None), size=(300, 30), pos_hint={'x': 0.35, 'y': 0.25})
         login_screen.add_widget(login_screen.password)
         login_screen.enter = Button(text="Enter", size_hint=(None, None), size=(70, 40), pos_hint={'x': 0.45, 'y': 0.15}, background_color=(0.1, 0.1, 0.1, 0.1), color=(0.0, 0.0, 0.0, 1))
+        login_screen.enter = Button(text="Enter", color=(0.8, 0.1, 0.3, 1))
         # login_screen.enter.bind(on_press=self.send_check)
         login_screen.add_widget(login_screen.enter)
 
@@ -56,7 +56,7 @@ class LoginScreen(Screen):
 
     def send_check(self):
         try:
-             answer = requests.get('')
+            answer = requests.get('')
         except Exception as e:
             e = str(e)
             p = Popup()
@@ -171,10 +171,12 @@ class MapScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__()
         self.name = 'MapsScreen'
+        self.text = TextInput(multiline=False)
         # gps.configure(on_location=self.check)
         # gps.start()
         self.map = mapview.MapView(lat=42.4381206, lon=19.2562048)
         self.adding = Button(text='Add', on_press=self.add_thing)
+        self.p = Image(source='marker_const.png')
         self.add_widget(self.adding)
         self.add_widget(self.map)
 
@@ -195,10 +197,20 @@ class MapScreen(Screen):
                  '''
 
     def add_thing(self):
-        p = Popup(title='', content=Label(text='Короче, подумайте как добавлять'))
+        accept_button = Button(text='acept', on_press=self.text_entering)
+        self.add_widget(accept_button)
+        self.add_widget(self.p)
+
+    def text_entering(self):
+        p = Popup(title='Your description of event', content=self.text)
+        p.bind(on_dismiss=self.send_event)
         p.open()
-        data = {}
-        requests.post('/geo', data)
+
+    def send_event(self):
+        self.remove_widget(self.p)
+        text = self.text
+        data = {'lan': self.map.lat, 'lon': self.map.lon, 'author': '', 'text': text}
+        # requests.post('/geo', data)
 
 
 class MyApp(App):
@@ -216,3 +228,5 @@ class MyApp(App):
 
 if __name__ == '__main__':
     MyApp().run()
+
+# nehvatka 70%
