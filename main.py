@@ -40,9 +40,6 @@ class LoginScreen(Screen):
         #здесь должно быть лого!!!
         login_screen.add_widget(Label(text='JMB', size_hint=(None, None), size=(100, 50), pos_hint={'x': 0.32, 'y': 0.37}, color=(0.0, 0.0, 0.0, 1)))
         login_screen.username = TextInput(multiline=False, size_hint=(None, None), size=(300, 30), pos_hint={'x': 0.35, 'y': 0.34})
-        login_screen.add_widget(
-            Label(text='User Name', size_hint=(None, None), size=(10, 10), pos_hint={'x': 0.3, 'y': 0.5}))
-        login_screen.username = TextInput(multiline=False)
         login_screen.add_widget(login_screen.username)
         login_screen.add_widget(Label(text='Password', size_hint=(None, None), size=(100, 50), pos_hint={'x': 0.34, 'y': 0.28}, color=(0.0, 0.0, 0.0, 1)))
         login_screen.password = TextInput(password=True, multiline=False, size_hint=(None, None), size=(300, 30), pos_hint={'x': 0.35, 'y': 0.25})
