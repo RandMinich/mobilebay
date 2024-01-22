@@ -1,18 +1,21 @@
-from flask import Flask, render_template, redirect, request, abort
+import json
+
+from flask import Flask, request
+
 from data.db_session import create_session
 from data.events import Events
-from data.coords import Coords
 from data.user import User
-import json
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret_key'
 session = create_session()
+
+
 @app.route('/check', methods=['POST', 'GET'])
 def check():
     name = request.args.get('name')
     password = request.args.get('password')
-    if session.query(User).filter(User.login==name).filter(User.password==password).first() != None:
+    if session.query(User).filter(User.login == name).filter(User.password == password).first() != None:
         return '+'
     return '-'
 
@@ -22,7 +25,7 @@ def add_user():
     name = request.args.get('name')
     login = request.args.get('login')
     password = request.args.get('password')
-    if name != None and login!= None and password!=None:
+    if name != None and login != None and password != None:
         if session.query(User).filter(User.login == login).filter(User.password == password).first() == None:
             u = User(name=name, login=login, password=password)
             session.add(u)
@@ -43,12 +46,12 @@ def notifications():
     name = request.args.get('name')
     password = request.args.get('password')
 
+
 @app.route('/geo', methods=['POST'])
 def give_coords():
     request_data = request.get_json()
-
     lan = None
-    lon=None
+    lon = None
     author = None
     text = None
     if request_data:
@@ -71,9 +74,9 @@ def get_coords():
     return ev
 
 
-
 def main():
     app.run()
+
 
 if __name__ == '__main__':
     while True:

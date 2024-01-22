@@ -48,7 +48,7 @@ class LoginScreen(Screen):
         login_screen.password = TextInput(password=True, multiline=False, size_hint=(None, None), size=(300, 30), pos_hint={'x': 0.35, 'y': 0.25})
         login_screen.add_widget(login_screen.password)
         login_screen.enter = Button(text="Enter", size_hint=(None, None), size=(70, 40), pos_hint={'x': 0.45, 'y': 0.15}, background_color=(0.1, 0.1, 0.1, 0.1), color=(0.0, 0.0, 0.0, 1))
-        login_screen.enter = Button(text="Enter", color=(0.8, 0.1, 0.3, 1))
+
         # login_screen.enter.bind(on_press=self.send_check)
         login_screen.add_widget(login_screen.enter)
 
