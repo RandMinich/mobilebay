@@ -16,7 +16,7 @@ class Notification(Based_Widget):
         self.text = text
         self.date = date
         tytle = Label(text=self.tytle, color=(0.0, 0.0, 0.0, 1), size_hint=(0.09, 1.9))
-        text = Label(text=self.text, color=(0.0, 0.0, 0.0, 1), size_hint=(None, None))
+        text = Label(text=self.text, color=(0.0, 0.0, 0.0, 1), size_hint=(0.5, 1.5))
         date = Label(text=str(self.date))
         close = Button(text='close', on_press=self.close, pos_hint ={'bottom':0.5, 'right':0.5}, size_hint=(None, None) , size=(70, 40))
         # тип как то будет влиять на внешку
