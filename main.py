@@ -59,7 +59,7 @@ class LoginScreen(Screen):
             self.manager.current = 'LoadingScreen'
         except Exception as e:
             e = str(e)
-            p = Popup()
+            p = Popup(auto_dismiss=False)
             p.title = 'Answer'
             c = Label(text=f'Процесс захода не произведен')
             p.add_widget(c)
@@ -202,7 +202,8 @@ class MapScreen(Screen):
         self.text = TextInput(multiline=False)
         # gps.configure(on_location=self.check)
         # gps.start()
-        self.map = mapview.MapView(lat=42.4381206, lon=19.2562048, zoom=5, size=(700, 400), size_hint=(None, None), pos=(50, 300))
+        self.map = mapview.MapView(lat=42.4381206, lon=19.2562048, zoom=11, size=(700, 400), size_hint=(None, None),
+                                   pos=(50, 300))
         self.adding = Button(text='Add', size=(70, 40), size_hint=(None, None), pos=(600, 100))
         self.adding.bind(on_press=self.add_thing)
         self.p = Image(source='marker_const.png', size_hint=(None, None), pos=(600, 100))
@@ -227,14 +228,15 @@ class MapScreen(Screen):
                  '''
 
     def add_thing(self, *args):
-        accept_button = Button(text='acept',on_press=self.text_entering)
+        self.accept_button = Button(text='acept', on_press=self.text_entering)
 
-        #accept_button.bind(on_press=self.text_entering)
-        self.add_widget(accept_button)
+        # accept_button.bind(on_press=self.text_entering)
+        self.add_widget(self.accept_button)
         self.add_widget(self.p)
 
     def text_entering(self, *args):
-        p = Popup(title='Your description of event', content=self.text, size_hint=(None, None), size=(400, 400))
+        p = Popup(title='Your description of event', content=self.text, size_hint=(None, None), size=(400, 400),
+                  auto_dismiss=False)
         p.bind(on_dismiss=self.send_event)
         p.open()
 
@@ -242,6 +244,7 @@ class MapScreen(Screen):
         self.remove_widget(self.p)
         text = self.text
         data = {'lan': self.map.lat, 'lon': self.map.lon, 'author': '', 'text': text}
+        self.remove_widget(self.accept_button)
         # requests.post('/geo', data)
 
     def to_main(self, *args):
