@@ -38,6 +38,10 @@ class RegisterScreen(Screen):
         self.name_and_last_name = TextInput(multiline=False, size_hint=(None, None), size=(300, 30),
                                             pos_hint={'x': 0.35, 'y': 0.4})
         register_screen.add_widget(self.name_and_last_name)
+
+        self.message = Label(text='', color=(0.0, 0.0, 0.0, 1), size_hint=(None, None), size=(100, 50), pos=(100, 2))
+        register_screen.add_widget(self.message)
+
         register_screen.add_widget(
             Label(text='JMB', size_hint=(None, None), size=(100, 50), pos_hint={'x': 0.32, 'y': 0.37},
                   color=(0.0, 0.0, 0.0, 1)))
@@ -59,9 +63,12 @@ class RegisterScreen(Screen):
         # try:
         answer = requests.post(
             f'http://randminich.pythonanywhere.com/add_user?name={self.name_and_last_name.text}&login={self.username.text}&password={self.password.text}')
-        global log
-        log = True
-        sm.current = 'MainScreen'
+        if answer.text == '+':
+            global log
+            log = True
+            sm.current = 'MainScreen'
+        else:
+            self.message.text = 'You already register'
 
 
 class Filler(Screen):
@@ -92,6 +99,10 @@ class LoginScreen(Screen):
         with self.canvas.before:
             Color(1, 1, 1, 1)  # Set the color (RGBA)
             self.rect = Rectangle(size=(1000, 1000), pos_hint={'x': 0.5, 'y': 0.5})
+
+        self.message = Label(text='', color=(0.0, 0.0, 0.0, 1), size_hint=(None, None), size=(100, 50), pos=(100, 2))
+        login_screen.add_widget(self.message)
+
         login_screen.add_widget(
             Label(text='JMB', size_hint=(None, None), size=(100, 50), pos_hint={'x': 0.32, 'y': 0.37},
                   color=(0.0, 0.0, 0.0, 1)))
@@ -116,9 +127,13 @@ class LoginScreen(Screen):
         # try:
         answer = requests.get(
             f'http://randminich.pythonanywhere.com/check?name={self.username.text}&password={self.password.text}')
-        global log
-        log = True
-        sm.current = 'MainScreen'
+        if answer.text == '+':
+            global log
+            log = True
+            sm.current = 'MainScreen'
+        else:
+            self.message.text = 'YOU ENTER WRONG PASSWORD OR JMB'
+
 
     def to_main(self, *args):
         sm.current = 'MainScreen'
