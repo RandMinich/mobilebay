@@ -36,9 +36,9 @@ class RegisterScreen(Screen):
             self.rect = Rectangle(size=(1000, 1000), pos_hint={'x': 0.5, 'y': 0.5})
 
         register_screen.add_widget(
-            Label(text='Name and surename', color=(0.0, 0.0, 0.0, 1), size_hint=(None, None), size=(45, 25)))
+            Label(text='Name and surename', color=(0.0, 0.0, 0.0, 1), pos_hint={'x': 0.384, 'y': 0.48}, size_hint=(None, None), size=(100, 50)))
         self.name_and_last_name = TextInput(multiline=False, size_hint=(None, None), size=(300, 30),
-                                            pos_hint={'x': 0.35, 'y': 0.4})
+                                            pos_hint={'x': 0.35, 'y': 0.44})
         register_screen.add_widget(self.name_and_last_name)
 
         self.message = Label(text='', color=(0.0, 0.0, 0.0, 1), size_hint=(None, None), size=(100, 50), pos=(100, 2))
@@ -112,7 +112,7 @@ class LoginScreen(Screen):
                                   pos_hint={'x': 0.35, 'y': 0.34})
         login_screen.add_widget(self.username)
 
-        login_screen.add_widget(Button(text='register', size_hint=(None, None), size=(50, 25), on_press=self.to_reg))
+        login_screen.add_widget(Button(text='Register', pos_hint={'x': 0.45,'y': 0.05}, size_hint=(None, None), size=(70, 40), on_press=self.to_reg, background_color=(0.1, 0.1, 0.1, 0.0), color=(0.1, 0.1, 0.1, 1)))
 
         login_screen.add_widget(
             Label(text='Password', size_hint=(None, None), size=(100, 50), pos_hint={'x': 0.34, 'y': 0.28},
@@ -337,12 +337,12 @@ class MyApp(App):
 
     def build(self):
         sm.add_widget(LoginScreen())
-        sm.add_widget(RegisterScreen())
-        sm.add_widget(MainScreen())
-        sm.add_widget(Notifications())
-        sm.add_widget(LoadingScreen())
-        sm.add_widget(MapScreen())
-        sm.add_widget(Filler())
+        # sm.add_widget(RegisterScreen())
+        # sm.add_widget(MainScreen())
+        # sm.add_widget(Notifications())
+        # sm.add_widget(LoadingScreen())
+        # sm.add_widget(MapScreen())
+        # sm.add_widget(Filler())
         # schedule.every(1).minute.run(MapScreen().check())
         return sm
 
