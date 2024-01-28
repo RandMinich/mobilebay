@@ -2,12 +2,13 @@ import json
 
 from flask import Flask, request
 
-from data.db_session import create_session
+from data.db_session import create_session, global_init
 from data.events import Events
 from data.user import User
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret_key'
+global_init('database.db')
 session = create_session()
 
 

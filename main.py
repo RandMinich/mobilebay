@@ -18,6 +18,66 @@ from data import notification
 # from pyto import *
 
 sm = ScreenManager()
+log = False
+
+
+class RegisterScreen(Screen):
+    def __init__(self):
+        super().__init__()
+        self.name = "RegisterScreen"
+
+        register_screen = FloatLayout()
+        self.add_widget(register_screen)
+
+        with self.canvas.before:
+            Color(1, 1, 1, 1)  # Set the color (RGBA)
+            self.rect = Rectangle(size=(1000, 1000), pos_hint={'x': 0.5, 'y': 0.5})
+
+        register_screen.add_widget(
+            Label(text='Name and surename', color=(0.0, 0.0, 0.0, 1), size_hint=(None, None), size=(45, 25)))
+        self.name_and_last_name = TextInput(multiline=False, size_hint=(None, None), size=(300, 30),
+                                            pos_hint={'x': 0.35, 'y': 0.4})
+        register_screen.add_widget(self.name_and_last_name)
+        register_screen.add_widget(
+            Label(text='JMB', size_hint=(None, None), size=(100, 50), pos_hint={'x': 0.32, 'y': 0.37},
+                  color=(0.0, 0.0, 0.0, 1)))
+        self.username = TextInput(multiline=False, size_hint=(None, None), size=(300, 30),
+                                  pos_hint={'x': 0.35, 'y': 0.34})
+        register_screen.add_widget(self.username)
+        register_screen.add_widget(
+            Label(text='Password', size_hint=(None, None), size=(100, 50), pos_hint={'x': 0.34, 'y': 0.28},
+                  color=(0.0, 0.0, 0.0, 1)))
+        self.password = TextInput(password=True, multiline=False, size_hint=(None, None), size=(300, 30),
+                                  pos_hint={'x': 0.35, 'y': 0.25})
+        register_screen.add_widget(self.password)
+        register_screen.enter = Button(text="Enter", size_hint=(None, None), size=(70, 40),
+                                       pos_hint={'x': 0.45, 'y': 0.15}, background_color=(0.1, 0.1, 0.1, 0.1),
+                                       color=(0.0, 0.0, 0.0, 1), on_press=self.send_check)
+        register_screen.add_widget(register_screen.enter)
+
+    def send_check(self, *args):
+        # try:
+        answer = requests.post(
+            f'http://randminich.pythonanywhere.com/add_user?name={self.name_and_last_name.text}&login={self.username.text}&password={self.password.text}')
+        global log
+        log = True
+        sm.current = 'MainScreen'
+
+
+class Filler(Screen):
+    def __init__(self, **kwargs):
+        super().__init__()
+        self.name = 'Filler'
+        filler_screen = BoxLayout()
+        self.add_widget(filler_screen)
+
+        with self.canvas.before:
+            Color(1, 1, 1, 1)  # Set the color (RGBA)
+            self.rect = Rectangle(size=(1000, 1000), pos_hint={'x': 0.5, 'y': 0.5})
+        filler_screen.add_widget(Label(text='Here will be menu of request', color=(0,0,0,1), size=(50, 30)))
+        filler_screen.add_widget(Button(text='Escape', size_hint=(None, None), size=(50, 30), pos=(100, 2), on_press=self.to_main))
+    def to_main(self, *args):
+        sm.current = 'MainScreen'
 
 
 class LoginScreen(Screen):
@@ -32,44 +92,40 @@ class LoginScreen(Screen):
         with self.canvas.before:
             Color(1, 1, 1, 1)  # Set the color (RGBA)
             self.rect = Rectangle(size=(1000, 1000), pos_hint={'x': 0.5, 'y': 0.5})
-
-        # здесь должно быть лого!!!
         login_screen.add_widget(
             Label(text='JMB', size_hint=(None, None), size=(100, 50), pos_hint={'x': 0.32, 'y': 0.37},
                   color=(0.0, 0.0, 0.0, 1)))
-        login_screen.username = TextInput(multiline=False, size_hint=(None, None), size=(300, 30),
-                                          pos_hint={'x': 0.35, 'y': 0.34})
-        login_screen.add_widget(login_screen.username)
+        self.username = TextInput(multiline=False, size_hint=(None, None), size=(300, 30),
+                                  pos_hint={'x': 0.35, 'y': 0.34})
+        login_screen.add_widget(self.username)
+
+        login_screen.add_widget(Button(text='register', size_hint=(None, None), size=(50, 25), on_press=self.to_reg))
+
         login_screen.add_widget(
             Label(text='Password', size_hint=(None, None), size=(100, 50), pos_hint={'x': 0.34, 'y': 0.28},
                   color=(0.0, 0.0, 0.0, 1)))
-        login_screen.password = TextInput(password=True, multiline=False, size_hint=(None, None), size=(300, 30),
-                                          pos_hint={'x': 0.35, 'y': 0.25})
-        login_screen.add_widget(login_screen.password)
+        self.password = TextInput(password=True, multiline=False, size_hint=(None, None), size=(300, 30),
+                                  pos_hint={'x': 0.35, 'y': 0.25})
+        login_screen.add_widget(self.password)
         login_screen.enter = Button(text="Enter", size_hint=(None, None), size=(70, 40),
                                     pos_hint={'x': 0.45, 'y': 0.15}, background_color=(0.1, 0.1, 0.1, 0.1),
                                     color=(0.0, 0.0, 0.0, 1), on_press=self.send_check)
-
-        # login_screen.enter.bind(on_press=self.send_check)
         login_screen.add_widget(login_screen.enter)
 
     def send_check(self, *args):
-        try:
-            answer = requests.get('')
-            self.manager.current = 'LoadingScreen'
-        except Exception as e:
-            e = str(e)
-            p = Popup(auto_dismiss=False)
-            p.title = 'Answer'
-            c = Label(text=f'Процесс захода не произведен')
-            p.add_widget(c)
-            p.show()
-            with open('logs.txt') as f:
-                f.write(f'\nError: {e}')
-            return 0
+        # try:
+        answer = requests.get(
+            f'http://randminich.pythonanywhere.com/check?name={self.username.text}&password={self.password.text}')
+        global log
+        log = True
+        sm.current = 'MainScreen'
 
     def to_main(self, *args):
-        self.manager.current = 'MainScreen'
+        sm.current = 'MainScreen'
+        return 0
+
+    def to_reg(self, *args, **kwargs):
+        sm.current = 'RegisterScreen'
         return 0
 
 
@@ -89,23 +145,23 @@ class MainScreen(Screen):
         main_screen.bell = Button(text="BELL", size_hint=(None, None), size=(80, 80), pos_hint={'x': 0.0, 'y': 0.9},
                                   color=(0.0, 0.0, 0.0, 1), background_color=(0.1, 0.1, 0.1, 0), on_press=self.notifs)
         main_screen.profile = Button(text="USER", size_hint=(None, None), size=(80, 80), pos_hint={'x': 0.92, 'y': 0.9},
-                                     color=(0.0, 0.0, 0.0, 1), background_color=(0.1, 0.1, 0.1, 0))
+                                     color=(0.0, 0.0, 0.0, 1), background_color=(0.1, 0.1, 0.1, 0), on_press=self.to_filler)
         main_screen.docs = Button(text="docs", size_hint=(None, None), size=(100, 100), pos_hint={'x': 0.2, 'y': 0.75},
-                                  color=(0.0, 0.0, 0.0, 1))
+                                  color=(0.0, 0.0, 0.0, 1), on_press=self.to_filler)
         main_screen.helthcare = Button(text="Hospital\nrequest", size_hint=(None, None), size=(100, 100),
-                                       pos_hint={'x': 0.45, 'y': 0.75}, color=(0.0, 0.0, 0.0, 1))
+                                       pos_hint={'x': 0.45, 'y': 0.75}, color=(0.0, 0.0, 0.0, 1), on_press=self.to_filler)
         # main_screen.taxes = Button(text="taxes") Здесь я хз что делать поэтому просто закоментил и ниже тоже самое
         main_screen.more = Button(text="more", size_hint=(None, None), size=(100, 100), pos_hint={'x': 0.7, 'y': 0.75},
-                                  color=(0.0, 0.0, 0.0, 1))
+                                  color=(0.0, 0.0, 0.0, 1), on_press=self.to_filler)
         main_screen.map = Button(text="map", size_hint=(None, None), size=(600, 300), pos_hint={'x': 0.2, 'y': 0.325},
                                  color=(0.0, 0.0, 0.0, 1), on_press=self.to_map)
         main_screen.text1 = Button(text="passport", size_hint=(None, None), size=(250, 150),
                                    pos_hint={'x': 0.2, 'y': 0.1}, color=(0.0, 0.0, 0.0,
-                                                                         1))  # Паспорт + права в кнопку надо сделать, я заменю, но просто чтобы ты не искал, они должны по-сути переводить на эти два раздела документов
+                                                                         1), on_press=self.to_filler)  # Паспорт + права в кнопку надо сделать, я заменю, но просто чтобы ты не искал, они должны по-сути переводить на эти два раздела документов
         main_screen.text2 = Button(text="driver licence", size_hint=(None, None), size=(250, 150),
-                                   pos_hint={'x': 0.55, 'y': 0.1}, color=(0.0, 0.0, 0.0, 1))
+                                   pos_hint={'x': 0.55, 'y': 0.1}, color=(0.0, 0.0, 0.0, 1), on_press=self.to_filler)
         main_screen.help = Button(text="help", size_hint=(None, None), size=(50, 20), pos_hint={'x': 0.48, 'y': 0.02},
-                                  color=(0.0, 0.0, 0.0, 1), background_color=(0.1, 0.1, 0.1, 0))
+                                  color=(0.0, 0.0, 0.0, 1), background_color=(0.1, 0.1, 0.1, 0), on_press=self.to_filler)
         main_screen.add_widget(main_screen.help)
         main_screen.add_widget(main_screen.text1)
         main_screen.add_widget(main_screen.text2)
@@ -129,14 +185,17 @@ class MainScreen(Screen):
         )
         '''
 
+    def to_filler(self, *args):
+        sm.current = 'Filler'
+
     def to_map(self, *args):
-        self.manager.current = 'MapMenu'
+        sm.current = 'MapScreen'
 
     def notifs(self, *args):
-        self.manager.current = 'Notifications'
+        sm.current = 'Notifications'
 
 
-notification_list = [('fuck', 'fsffwfwfffgsdgdgddgdgdfg'), ('you', 'fsffwfwfffgsdgdgddgdgdfg')]
+notification_list = [('Attention', 'fsffwfwfffgsdgdgddgdgdfg'), ('Warning', 'fsffwfwfffgsdgdgddgdgdfg')]
 
 
 class Notifications(Screen):
@@ -161,7 +220,7 @@ class Notifications(Screen):
             self.rect = Rectangle(size=(1000, 1000), pos_hint={'x': 0.5, 'y': 0.5})
 
     def to_main(self, *args):
-        self.manager.current = 'MainScreen'
+        sm.current = 'MainScreen'
         return 0
 
 
@@ -174,7 +233,7 @@ class Documents(Screen):
             documents_screen.add_widget(i)
 
     def to_main(self, *args):
-        self.manager.current = 'MainScreen'
+        sm.current = 'MainScreen'
         return 0
 
 
@@ -182,9 +241,13 @@ class LoadingScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__()
         self.name = 'LoadingScreen'
-        time.sleep(10)
-        self.manager.current = 'MainScreen'
         # requests.get('запрос к серверу на получение уведомлений')
+        if log:
+            self.change()
+
+    def change(self, **kwargs):
+        time.sleep(10)
+        sm.current = 'MainScreen'
 
 
 class Services(Screen):
@@ -198,23 +261,27 @@ class Services(Screen):
 class MapScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__()
-        self.name = 'MapsScreen'
+        self.name = 'MapScreen'
         self.text = TextInput(multiline=False)
         # gps.configure(on_location=self.check)
         # gps.start()
-        self.map = mapview.MapView(lat=42.4381206, lon=19.2562048, zoom=11, size=(700, 400), size_hint=(None, None),
+        self.map = mapview.MapView(lat=42.4381206, lon=19.2562048, zoom=11, size=(500, 400), size_hint=(None, None),
                                    pos=(50, 300))
         self.adding = Button(text='Add', size=(70, 40), size_hint=(None, None), pos=(600, 100))
         self.adding.bind(on_press=self.add_thing)
         self.p = Image(source='marker_const.png', size_hint=(None, None), pos=(600, 100))
         self.add_widget(self.adding)
         self.add_widget(self.map)
-        self.escape = Button(text='Escape', on_press=self.to_main)
+        self.escape = Button(text='Escape', on_press=self.to_main, size_hint=(None, None), size=(50, 50), pos=(500, 40))
+        self.add_widget(self.escape)
+
+        self.pop = Popup(title='Your description of event', size_hint=(None, None), size=(400, 400),
+                         auto_dismiss=False)
 
     '''
     
     def check(self, **kwargs):
-        # c = requests.get('/get_coords').json()
+        # c = requests.get('http://randminich.pythonanywhere.com/get_coords').json()
         lat = kwargs['lat']
         lon = kwargs['lon']
         for i in c:
@@ -228,40 +295,40 @@ class MapScreen(Screen):
                  '''
 
     def add_thing(self, *args):
-        self.accept_button = Button(text='acept', on_press=self.text_entering)
-
-        # accept_button.bind(on_press=self.text_entering)
+        self.accept_button = Button(text='acept', on_press=self.text_entering, size_hint=(None, None), size=(50, 50))
         self.add_widget(self.accept_button)
         self.add_widget(self.p)
 
     def text_entering(self, *args):
-        p = Popup(title='Your description of event', content=self.text, size_hint=(None, None), size=(400, 400),
-                  auto_dismiss=False)
-        p.bind(on_dismiss=self.send_event)
-        p.open()
+        content = BoxLayout()
+        content.add_widget(TextInput(multiline=False, size_hint=(None, None), size=(300, 30)))
+        content.add_widget(Button(text='close', size_hint=(None, None), size=(30, 30), on_press=self.pop.dismiss))
+        self.pop.content = content
+        self.pop.bind(on_dismiss=self.send_event)
+        self.pop.open()
 
     def send_event(self, *args):
         self.remove_widget(self.p)
         text = self.text
         data = {'lan': self.map.lat, 'lon': self.map.lon, 'author': '', 'text': text}
         self.remove_widget(self.accept_button)
-        # requests.post('/geo', data)
+        requests.post('http://randminich.pythonanywhere.com/geo', data)
 
     def to_main(self, *args):
-        self.manager.current = 'MainScreen'
+        sm.current = 'MainScreen'
         return 0
 
 
 class MyApp(App):
 
     def build(self):
-        # sm.add_widget(LoginScreen())
-        # sm.add_widget(MainScreen())
-        # sm.add_widget(Notifications())
-        # sm.add_widget(LoginScreen())
-        # sm.add_widget(MainScreen())
-        # sm.add_widget(Notifications())
+        sm.add_widget(LoginScreen())
+        sm.add_widget(RegisterScreen())
+        sm.add_widget(MainScreen())
+        sm.add_widget(Notifications())
+        sm.add_widget(LoadingScreen())
         sm.add_widget(MapScreen())
+        sm.add_widget(Filler())
         # schedule.every(1).minute.run(MapScreen().check())
         return sm
 

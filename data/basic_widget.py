@@ -12,8 +12,8 @@ class Based_Widget:
     def __init__(self, *args, **kwargs):
         self.lay = AnchorLayout()
 
-    def show(self):
+    def show(self, *args):
         return self.lay
 
-    def close(self):
+    def close(self, *args):
         self.lay.parent.remove_widget(self.lay)
