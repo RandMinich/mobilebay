@@ -12,6 +12,8 @@ from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.textinput import TextInput
+import plyer
+import math
 
 from data import notification
 
@@ -293,10 +295,9 @@ class MapScreen(Screen):
         self.pop = Popup(title='Your description of event', size_hint=(None, None), size=(400, 400),
                          auto_dismiss=False)
 
-    '''
     
     def check(self, **kwargs):
-        # c = requests.get('http://randminich.pythonanywhere.com/get_coords').json()
+        c = requests.get('http://randminich.pythonanywhere.com/get_coords').json()
         lat = kwargs['lat']
         lon = kwargs['lon']
         for i in c:
@@ -305,9 +306,7 @@ class MapScreen(Screen):
                     and i.lon < lon + (
                     (111111 * math.cos(math.radians(lon)) * 0.0001) / 111111):
                 notification_list.append(notification.Notification().show())
-                plyer.notification.notify(title='Warning', message="Уебывай оттуда")
-                
-                 '''
+                plyer.notification.notify(title='Warning', message="Уходи оттуда")
 
     def add_thing(self, *args):
         self.accept_button = Button(text='acept', on_press=self.text_entering, size_hint=(None, None), size=(50, 50))
